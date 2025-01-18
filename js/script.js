@@ -1,4 +1,4 @@
-const type = document.getElementById('type');
+const type = document.getElementById('type')
 const constructor = document.getElementById("constructor")
 const target = document.getElementById("target")
 const create = document.getElementById("create")
@@ -8,20 +8,22 @@ const triggers = new Set(["h1", "span", "p"])
 
 constructor.addEventListener("dragstart", e => {
 	if(e.target === e.currentTarget) return
-	console.log(e.target)
+
 	e.target.classList.add("dragging")
 	e.dataTransfer.setData("text/plain", e.target.dataset.id)
 })
 
 target.addEventListener("dragover", e => e.preventDefault())
+
 target.addEventListener("drop", e => {
-	console.log(e.dataTransfer.getData("text/plain"))
+
 	if(e.target.nodeName !== "DIV") return
 	const id = e.dataTransfer.getData("text/plain")
 	const droppable = document.querySelector(`[data-id="${id}"]`)
 
 	e.target.appendChild(droppable)
 	droppable.classList.remove("dragging")
+	droppable.draggable = false
 })
 
 function createElem(tag, content){
@@ -29,7 +31,9 @@ function createElem(tag, content){
 	newElement.classList.add("created")
 	newElement.draggable = true
 	newElement.dataset.id = crypto.randomUUID()
-	if(content) newElement.textContent = content
+	if(tag === "input") newElement.placeholder = 'input teg'
+	if(content) newElement.innerHTML = `<pre>&#60;${tag}&#62;</pre> ${content}`
+	else newElement.innerHTML = `<pre>&#60;${tag}&#62;</pre>`
 
 	return newElement
 }
@@ -44,7 +48,6 @@ type.addEventListener('change', function(){
 	} else{
 		hidden.type = "hidden"
 		hidden.value = ""
-
 	}
 })
 
